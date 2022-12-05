@@ -8,9 +8,11 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
-@ApplicationScoped
+// FIXME: Inject of start up does not work
+// @ApplicationScoped
 public class InitialProvisioning {
-    @Inject
+
+//    @Inject
     private ProvisioningService provisioningService;
 
     public void onStart(@Observes @Initialized(ApplicationScoped.class) final ServletContext context) {

@@ -7,11 +7,10 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -82,20 +81,27 @@ public class ProvisioningService {
     }
 
     private String[] getSymbols(final Client client) {
+        File file = new File("/home/markus/playground/Java-EE-8-High-Performance/chapter01/quote-manager/src/data/cboesymboldir2.csv");
         try (final BufferedReader stream = new BufferedReader(
+                /*
                 new InputStreamReader(
                         client.target(symbolIndex)
                                 .request(APPLICATION_OCTET_STREAM_TYPE)
                                 .get(InputStream.class),
                         StandardCharsets.UTF_8))) {
-
+                   */
+                new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8))) {
             return stream.lines().skip(2/*comment+header*/)
                     .map(line -> line.split(","))
                     .filter(columns -> columns.length > 2 && !columns[1].isEmpty())
                     .map(columns -> columns[1])
                     .toArray(String[]::new);
-        } catch (final IOException e) {
-            throw new IllegalArgumentException("Can't connect to find symbols", e);
+        } catch (final Exception e) {
+           // throw new IllegalArgumentException("Can't connect to find symbols", e);
+            List<String> symbol = new ArrayList<>();
+            symbol.add("APPL");
+
+            return symbol.toArray(new String[0]);
         }
     }
 

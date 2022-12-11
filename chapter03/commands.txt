@@ -1,0 +1,6 @@
+cd ../../chapter01/QuoteManager/
+mvn clean package embedded-glassfish:run
+
+jcmd
+jcmd <processID> help
+jcmd <proccesID> Thread.print
